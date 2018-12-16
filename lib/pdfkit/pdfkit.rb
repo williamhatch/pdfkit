@@ -62,16 +62,19 @@ class PDFKit
 
     invoke = command(path)
 
-    result = IO.popen(invoke, "wb+") do |pdf|
-      pdf.puts(@source.to_s) if @source.html?
-      pdf.close_write
-      pdf.gets(nil) if path.nil?
-    end
+#     result = IO.popen(invoke, "wb+") do |pdf|
+#       pdf.puts(@source.to_s) if @source.html?
+#       pdf.close_write
+#       pdf.gets(nil) if path.nil?
+#     end
 
-    # $? is thread safe per
-    # http://stackoverflow.com/questions/2164887/thread-safe-external-process-in-ruby-plus-checking-exitstatus
-    raise "command failed (exitstatus=#{$?.exitstatus}): #{invoke}" if empty_result?(path, result) or !successful?($?)
-    return result
+#     # $? is thread safe per
+#     # http://stackoverflow.com/questions/2164887/thread-safe-external-process-in-ruby-plus-checking-exitstatus
+#     raise "command failed (exitstatus=#{$?.exitstatus}): #{invoke}" if empty_result?(path, result) or !successful?($?)
+#     return result
+    fn = to_temp_file
+    puts `cat #{fn} | #{invoke}`
+    path
   end
 
   def to_file(path)
