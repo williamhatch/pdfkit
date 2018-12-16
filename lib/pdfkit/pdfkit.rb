@@ -79,6 +79,13 @@ class PDFKit
     File.new(path)
   end
 
+  def to_temp_file
+    require 'tempfile'
+    t = Tempfile.new
+    t.write @source.to_s
+    t.path
+  end
+  
   protected
 
   def find_options_in_meta(content)
