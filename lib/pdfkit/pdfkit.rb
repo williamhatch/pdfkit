@@ -73,7 +73,9 @@ class PDFKit
 #     raise "command failed (exitstatus=#{$?.exitstatus}): #{invoke}" if empty_result?(path, result) or !successful?($?)
 #     return result
     fn = to_temp_file
-    puts `cat #{fn} | #{invoke}`
+    puts `cat #{fn.path} | #{invoke}`
+    fn.close
+    fn.unlink
     path
   end
 
@@ -86,7 +88,7 @@ class PDFKit
     require 'tempfile'
     t = Tempfile.new
     t.write @source.to_s
-    t.path
+    t
   end
   
   protected
